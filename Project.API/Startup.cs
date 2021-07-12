@@ -29,6 +29,7 @@ namespace Project.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<StoreContext>();
+            services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddControllers();
         }

@@ -21,8 +21,8 @@ namespace Project.Infrastructure.Implements
         public async Task<IReadOnlyList<Product>> GetProductAsync()
         {
             return await _context.Products
-                .Include(p=>p.ProductBrand)
-                .Include(p=>p.ProductType)
+                .Include(p => p.ProductBrand)
+                .Include(p => p.ProductType)
                 .ToListAsync();
         }
 
