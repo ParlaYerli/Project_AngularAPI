@@ -21,11 +21,26 @@ namespace Project.API.Controllers
             _repository = repository;
         }
 
-        [HttpGet("all")]
+        [HttpGet("products")]
         public async Task<ActionResult<List<Product>>> GetProducts()
         {
             return Ok(await _repository.GetProductAsync());
         }
+
+
+        [HttpGet("brands")]
+        public async Task<ActionResult<List<ProductBrand>>> GetProductBrand()
+        {
+            return Ok(await _repository.GetProductBrandAsync());
+        }
+
+
+        [HttpGet("types")]
+        public async Task<ActionResult<List<ProductType>>> GetProductType()
+        {
+            return Ok(await _repository.GetProductTypeAsync());
+        }
+
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProductById(int id)

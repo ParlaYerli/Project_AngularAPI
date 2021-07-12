@@ -39,7 +39,6 @@ namespace Project.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-               // SeedDatabase.Seed();
             }
 
             app.UseRouting();
