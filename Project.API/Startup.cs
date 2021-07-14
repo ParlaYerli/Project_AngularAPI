@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Project.API.Helpers;
 using Project.Core.Interfaces;
 using Project.Infrastructure.DataContext;
 using Project.Infrastructure.Implements;
@@ -29,6 +30,7 @@ namespace Project.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<StoreContext>();
+            services.AddAutoMapper(typeof(MappingProfiles));
             services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddControllers();
