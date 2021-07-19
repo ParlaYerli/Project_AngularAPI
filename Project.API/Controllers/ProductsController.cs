@@ -13,9 +13,7 @@ using Project.API.Dtos;
 
 namespace Project.API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ProductsController : ControllerBase
+    public class ProductsController : BaseApiController
     {
         //private readonly IProductRepository _repository;
         private readonly IGenericRepository<Product> _productRepository;
