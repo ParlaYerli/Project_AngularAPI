@@ -2,13 +2,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
+using Project.API.Extensions;
 using Project.API.Helpers;
 using Project.API.Middleware;
-using Project.Core.Interfaces;
 using Project.Infrastructure.DataContext;
-using Project.Infrastructure.Implements;
-using Swashbuckle.AspNetCore.Swagger;
 
 namespace Project.API
 {
@@ -24,16 +21,11 @@ namespace Project.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddApplicationService();
+            services.AddSwaggerDocumentation();
             services.AddDbContext<StoreContext>();
             services.AddAutoMapper(typeof(MappingProfiles));
-            services.AddTransient(typeof(IGenericRepository<>),typeof(GenericRepository<>));
-            services.AddTransient<IProductRepository, ProductRepository>();
-       
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Project API", Version = "v1" });
-            });
-
+           
             services.AddControllers();
         }
 
@@ -44,22 +36,13 @@ namespace Project.API
              {
                  app.UseDeveloperExceptionPage();
              }*/
-
+            app.UserSwaggerDocumentation();
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseStatusCodePagesWithReExecute("/error/{0}");
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
 
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Project API");
-            });
-
-          
-         
-         
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
