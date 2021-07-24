@@ -1,10 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Project.Core.DbModels;
 using Project.Core.Specification;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Project.Infrastructure.Data
 {
@@ -16,6 +13,14 @@ namespace Project.Infrastructure.Data
             if (spec.Criteria!=null)
             {
                 query = query.Where(spec.Criteria);
+            }
+            if (spec.OrderBy != null)
+            {
+                query = query.OrderBy(spec.OrderBy);
+            }
+            if (spec.OrderByDescending != null)
+            {
+                query = query.OrderByDescending(spec.OrderByDescending);
             }
             query = spec.Includes.Aggregate(query,(current,include)=>current.Include(include));
             return query;

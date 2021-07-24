@@ -1,15 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Project.Infrastructure.DataContext;
+using Project.API.Dtos;
 using Project.Core.DbModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Project.Core.Interfaces;
 using Project.Core.Specification;
-using AutoMapper;
-using Project.API.Dtos;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Project.API.Controllers
 {
@@ -30,9 +26,9 @@ namespace Project.API.Controllers
         }
 
         [HttpGet("products")]
-        public async Task<ActionResult<IReadOnlyList<ProductDto>>> GetProducts()
+        public async Task<ActionResult<IReadOnlyList<ProductDto>>> GetProducts(string sort)
         {
-            var spec = new ProductsWithProductTypeAndBrandsSpecification();
+            var spec = new ProductsWithProductTypeAndBrandsSpecification(sort);
             var data = await _productRepository.ListAsync(spec);
             return Ok(_mapper.Map<IReadOnlyList<Product>,IReadOnlyList<ProductDto>>(data));
         }
