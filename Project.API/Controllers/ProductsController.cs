@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Project.API.Dtos;
+using Project.API.Helpers;
 using Project.Core.DbModels;
 using Project.Core.Interfaces;
 using Project.Core.Specification;
@@ -26,20 +27,21 @@ namespace Project.API.Controllers
         }
 
         [HttpGet("products")]
-        public async Task<ActionResult<IReadOnlyList<ProductDto>>> GetProducts(string sort)
+        public async Task<ActionResult<Pagination<ProductDto>>> GetProducts([FromQuery]ProductSpecParams productSpecParams)
         {
-            var spec = new ProductsWithProductTypeAndBrandsSpecification(sort);
-            var data = await _productRepository.ListAsync(spec);
-            return Ok(_mapper.Map<IReadOnlyList<Product>,IReadOnlyList<ProductDto>>(data));
+            var spec = new ProductsWithProductTypeAndBrandsSpecification(productSpecParams);
+            var countSpec = new ProductWithFiltersForCountSpecification(productSpecParams);
+            var totalItems = await _productRepository.CountAsync(spec);
+            var products = await _productRepository.ListAsync(spec);
+            var data =  _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductDto>>(products);
+            return Ok(new Pagination<ProductDto>(productSpecParams.PageIndex, productSpecParams.PageSize, totalItems, data));
         }
-
 
         [HttpGet("brands")]
         public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductBrand()
         {
             return Ok(await _productBrandRepository.ListAllAsync());
         }
-
 
         [HttpGet("types")]
         public async Task<ActionResult<List<ProductType>>> GetProductType()
